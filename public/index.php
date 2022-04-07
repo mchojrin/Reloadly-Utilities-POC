@@ -4,7 +4,7 @@
 </head>
 <body>
 <?php
-$countries = require_once __DIR__ . '../config/countries.php';
+$countries = require_once __DIR__ . '/../config/countries.php';
 ?>
 <form method="post" action="select_vendor.php">
     <label for="country">Select your country</label>
