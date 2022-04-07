@@ -10,33 +10,39 @@ if ('post' !== strtolower($_SERVER['REQUEST_METHOD'])) {
 }
 
 $country = $_POST['country'] ?? '';
-$countries = require_once __DIR__ . '../config/countries.php';
+$countries = require_once __DIR__ . '/../config/countries.php';
 
-if (!in_array($country, $countries)) {
+if (!array_key_exists($country, $countries)) {
     http_response_code(400);
     die($country . ' is not available at the moment');
 }
 
-require_once 'vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use GuzzleHttp\Client;
 
 $client = new Client([
     'timeout' => 2.0,
 ]);
-$auth = require_once __DIR__ . '/../config/auth.example.php';
+$auth = require_once __DIR__ . '/../config/auth.php';
 
 $response = $client->post('https://auth.reloadly.com/oauth/token',
     [
-        'Content-Type' => 'application/json',
+        'headers' =>
+            [
+                'Content-Type' => 'application/json',
+            ],
         'body' => json_encode(
             [
                 "client_id" => $auth['client_id'],
-                "secret" => $auth['secret'],
+                "client_secret" => $auth['secret'],
+                "grant_type" => 'client_credentials',
+                "audience" => 'https://utilities.reloadly.com',
             ]
         ),
     ]);
 
+die(var_dump($response->getBody()));
 $response = $client->request('GET', 'billers', [
     'query' => [
         'countryISOCode' => $country,
