@@ -12,5 +12,7 @@
             "email": "mauro.chojrin@leewayweb.com"
         }
     ],
-    "require": {}
+    "require": {
+        "guzzlehttp/guzzle": "^7.0"
+    }
 }

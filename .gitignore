@@ -1,0 +1,3 @@
+vendor/*
+config/auth.php
+.idea/*
