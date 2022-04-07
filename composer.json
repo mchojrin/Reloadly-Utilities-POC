@@ -1,0 +1,16 @@
+{
+    "name": "mchojrin/reloadly-utilities-poc",
+    "description": "A POC for how to use Reloadly's utilities API",
+    "autoload": {
+        "psr-4": {
+            "Mchojrin\\ReloadlyUtilitiesPoc\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mauro Chojrin",
+            "email": "mauro.chojrin@leewayweb.com"
+        }
+    ],
+    "require": {}
+}
