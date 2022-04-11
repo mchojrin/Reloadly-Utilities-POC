@@ -16,7 +16,7 @@ $countries = require_once __DIR__ . '/../config/countries.php';
         endforeach;
         ?>
     </select>
-    <input type="submit" value="Select vendor">
+    <input type="submit" value="This is my country">
 </form>
 </body>
 </html>

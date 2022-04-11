@@ -42,19 +42,26 @@ $response = $client->post('https://auth.reloadly.com/oauth/token',
         ),
     ]);
 
-die(var_dump($response->getBody()));
-$response = $client->request('GET', 'billers', [
+$token = json_decode($response->getBody())->access_token;
+
+$response = $client->request('GET', 'https://utilities.reloadly.com/billers', [
     'query' => [
         'countryISOCode' => $country,
+    ],
+    'headers' => [
+        'Accept' => 'application/com.reloadly.utilities-v1+json',
+        'Authorization' => 'Bearer ' . $token,
     ]
 ]);
+
+$billers = json_decode($response->getBody())->content;
 ?>
 <form method="post" action="select_vendor.php">
-    <label for="country">Select your country</label>
+    <label for="country">Select your vendor</label>
     <select name="country" id="country">
         <?php
-        foreach ($countries as $iso => $country): ?>
-            <option value="<?php echo $iso; ?>"><?php echo $country; ?></option>
+        foreach ($billers as $biller): ?>
+            <option value="<?php echo $biller->id; ?>"><?php echo $biller->name; ?></option>
         <?php
         endforeach;
         ?>
