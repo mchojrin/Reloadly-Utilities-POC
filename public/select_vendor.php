@@ -1,3 +1,7 @@
+<?php
+
+session_start();
+?>
 <html>
 <head>
     <title>Reloadly's Utilities Payment demo Application</title>
@@ -43,6 +47,7 @@ $response = $client->post('https://auth.reloadly.com/oauth/token',
     ]);
 
 $token = json_decode($response->getBody())->access_token;
+$_SESSION['token'] = $token;
 
 $response = $client->request('GET', 'https://utilities.reloadly.com/billers', [
     'query' => [
@@ -56,9 +61,9 @@ $response = $client->request('GET', 'https://utilities.reloadly.com/billers', [
 
 $billers = json_decode($response->getBody())->content;
 ?>
-<form method="post" action="select_vendor.php">
-    <label for="country">Select your vendor</label>
-    <select name="country" id="country">
+<form method="post" action="pay.php">
+    <label for="biller">Select your biller</label>
+    <select name="biller_id" id="biller">
         <?php
         foreach ($billers as $biller): ?>
             <option value="<?php echo $biller->id; ?>"><?php echo $biller->name; ?></option>
@@ -66,7 +71,11 @@ $billers = json_decode($response->getBody())->content;
         endforeach;
         ?>
     </select>
-    <input type="submit" value="Select vendor">
+    <label for="account_number">Account Number:</label>
+    <input type="text" name="account_number" id="account_number" placeholder="Enter your account number"/>
+    <label for="amount">Amount:</label>
+    <input type="number" min="1" name="amount" id="amount"/>
+    <input type="submit" value="Pay">
 </form>
 </body>
 </html>
