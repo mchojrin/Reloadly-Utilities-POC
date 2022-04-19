@@ -23,22 +23,34 @@ $client = new Client([
     'timeout' => 2.0,
 ]);
 
+require_once '../header.php';
+
 try {
-    $response = $client->request('POST', 'https://utilities.reloadly.com/pay', [
-        'headers' => [
-            'Accept' => 'application/com.reloadly.utilities-v1+json',
-            'Authorization' => 'Bearer ' . $token,
-            'Content-Type' => 'application/json',
-        ],
-        'body' => json_encode([
-            'subscriberAccountNumber' => $_POST['account_number'],
-            'amount' => $_POST['amount'],
-            'billerId' => $_POST['biller_id'],
-            'useLocalAmount' => false,
-        ])
+    $body = [
+        'subscriberAccountNumber' => $_POST['account_number'],
+        'amount' => $_POST['amount'],
+        'billerId' => $_POST['biller_id'],
+        'useLocalAmount' => false,
+    ];
+
+    $headers = [
+        'Accept' => 'application/com.reloadly.utilities-v1+json',
+        'Authorization' => 'Bearer ' . $token,
+        'Content-Type' => 'application/json',
+    ];
+    $response = $client->request('POST', 'https://utilities-sandbox.reloadly.com/pay', [
+        'headers' => $headers,
+        'body' => json_encode($body)
     ]);
 
-    echo json_decode($response->getBody())->message;
+?>
+        <h2>Server Response: </h2>
+    <div>
+    <?php echo json_decode($response->getBody())->message; ?>
+    </div><?php
 } catch (\GuzzleHttp\Exception\ClientException $exception) {
-    die ($exception->getMessage());
+    die ('POST failed: <strong>'.$exception->getMessage().'</strong>. Headers: <pre>'.var_dump($headers).'</pre>. Body: <pre>'.var_dump($body).'</pre>.');
 }
+
+require_once '../footer.php';
+?>

@@ -1,13 +1,7 @@
 <?php
 
 session_start();
-?>
-<html>
-<head>
-    <title>Reloadly's Utilities Payment demo Application</title>
-</head>
-<body>
-<?php
+require_once '../header.php';
 if ('post' !== strtolower($_SERVER['REQUEST_METHOD'])) {
     http_response_code(400);
     die('This page can only be accessed via post');
@@ -41,7 +35,7 @@ $response = $client->post('https://auth.reloadly.com/oauth/token',
                 "client_id" => $auth['client_id'],
                 "client_secret" => $auth['secret'],
                 "grant_type" => 'client_credentials',
-                "audience" => 'https://utilities.reloadly.com',
+                "audience" => 'https://utilities-sandbox.reloadly.com',
             ]
         ),
     ]);
@@ -49,7 +43,7 @@ $response = $client->post('https://auth.reloadly.com/oauth/token',
 $token = json_decode($response->getBody())->access_token;
 $_SESSION['token'] = $token;
 
-$response = $client->request('GET', 'https://utilities.reloadly.com/billers', [
+$response = $client->request('GET', 'https://utilities-sandbox.reloadly.com/billers', [
     'query' => [
         'countryISOCode' => $country,
     ],
@@ -62,20 +56,30 @@ $response = $client->request('GET', 'https://utilities.reloadly.com/billers', [
 $billers = json_decode($response->getBody())->content;
 ?>
 <form method="post" action="pay.php">
-    <label for="biller">Select your biller</label>
-    <select name="biller_id" id="biller">
-        <?php
-        foreach ($billers as $biller): ?>
-            <option value="<?php echo $biller->id; ?>"><?php echo $biller->name; ?></option>
-        <?php
-        endforeach;
-        ?>
-    </select>
-    <label for="account_number">Account Number:</label>
-    <input type="text" name="account_number" id="account_number" placeholder="Enter your account number"/>
-    <label for="amount">Amount:</label>
-    <input type="number" min="1" name="amount" id="amount"/>
-    <input type="submit" value="Pay">
+    <h2>Enter payment details</h2>
+    <div>
+        <label for="biller">Biller</label>
+        <select name="biller_id" id="biller" class="form-control">
+            <?php
+            foreach ($billers as $biller): ?>
+                <option value="<?php echo $biller->id; ?>"><?php echo $biller->name; ?></option>
+            <?php
+            endforeach;
+            ?>
+        </select>
+    </div>
+    <div>
+        <label for="account_number">Account Number:</label>
+        <input type="text" name="account_number" id="account_number" placeholder="Enter your account number" class="form-control"/>
+    </div>
+    <div>
+        <label for="amount">Amount:</label>
+        <input type="number" min="1" name="amount" id="amount" class="form-control"/>
+    </div>
+    <div>
+        <input type="submit" value="Pay" class="btn btn-lg btn-primary btn-block">
+    </div>
 </form>
-</body>
-</html>
+<?php
+
+require_once '../footer.php';
