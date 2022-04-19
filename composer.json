@@ -1,11 +1,6 @@
 {
     "name": "mchojrin/reloadly-utilities-poc",
-    "description": "A POC for how to use Reloadly's utilities API",
-    "autoload": {
-        "psr-4": {
-            "Mchojrin\\ReloadlyUtilitiesPoc\\": "src/"
-        }
-    },
+    "description": "A POC for how to use Reloadly Utility API",
     "authors": [
         {
             "name": "Mauro Chojrin",
@@ -13,6 +8,7 @@
         }
     ],
     "require": {
-        "guzzlehttp/guzzle": "^7.0"
+        "guzzlehttp/guzzle": "^7.0",
+      "ext-json": "*"
     }
 }
