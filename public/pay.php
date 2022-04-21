@@ -53,4 +53,3 @@ try {
 }
 
 require_once '../footer.php';
-?>
